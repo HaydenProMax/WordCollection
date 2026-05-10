@@ -58,12 +58,16 @@
       <aside class="history-panel" aria-labelledby="history-title">
         <div class="panel-heading">
           <h2 id="history-title">查询记录</h2>
-          <button type="button" id="refresh-history" aria-label="刷新查询记录" title="刷新查询记录">
-            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
-              <path d="M21 12a9 9 0 1 1-2.64-6.36" />
-              <path d="M21 4v6h-6" />
-            </svg>
-          </button>
+          <div class="history-tools">
+            <a class="export-link" href="/api/export/json" title="导出 JSON">JSON</a>
+            <a class="export-link" href="/api/export/csv" title="导出 CSV">CSV</a>
+            <button type="button" id="refresh-history" aria-label="刷新查询记录" title="刷新查询记录">
+              <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+                <path d="M21 12a9 9 0 1 1-2.64-6.36" />
+                <path d="M21 4v6h-6" />
+              </svg>
+            </button>
+          </div>
         </div>
         <label class="search-label" for="history-search">搜索记录</label>
         <input id="history-search" class="history-search" type="search" placeholder="输入关键词" />

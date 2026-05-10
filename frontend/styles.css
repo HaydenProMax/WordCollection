@@ -34,6 +34,11 @@ textarea {
   font: inherit;
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 .shell {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 360px;
@@ -152,9 +157,11 @@ textarea:focus {
 }
 
 .result-tools {
+.history-tools,
+.result-tools {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 #char-count,
@@ -296,6 +303,23 @@ svg {
   padding: 0;
   background: #e0e7ff;
   color: var(--primary-dark);
+}
+
+.export-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  border-radius: 8px;
+  padding: 0 10px;
+  background: #eef2ff;
+  color: var(--primary-dark);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.export-link:hover {
+  background: #e0e7ff;
 }
 
 #copy-result {

@@ -104,9 +104,12 @@ Deferred features:
 
 - [ ] Favorite lookup
 - [ ] Tags
-- [ ] Export JSON
-- [ ] Export CSV
 - [ ] Basic statistics
+
+Completed business additions:
+
+- [x] Export JSON
+- [x] Export CSV
 
 ## Technical Decisions
 
@@ -380,3 +383,10 @@ python -m uvicorn app.main:app --reload
 - Added history filtering by query type.
 - Replaced browser delete prompt with an in-page second-click confirmation.
 - Added API support and tests for `query_type` history filtering.
+
+### 2026-05-10 Data Export
+
+- Added `GET /api/export/json`.
+- Added `GET /api/export/csv`.
+- Added JSON and CSV export links in the history panel.
+- Added API tests for both export formats.

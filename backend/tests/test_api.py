@@ -125,3 +125,28 @@ def test_regenerate_lookup_updates_existing_record() -> None:
     body = regenerated.json()
     assert body["id"] == created["id"]
     assert body["explanation"] == "Test explanation 2."
+
+
+def test_export_json() -> None:
+    client = build_client()
+    client.post("/api/lookups", json={"text": "subtle"})
+
+    exported = client.get("/api/export/json")
+
+    assert exported.status_code == 200
+    assert exported.headers["content-type"].startswith("application/json")
+    assert "attachment" in exported.headers["content-disposition"]
+    assert exported.json()["items"][0]["original"] == "subtle"
+
+
+def test_export_csv() -> None:
+    client = build_client()
+    client.post("/api/lookups", json={"text": "subtle"})
+
+    exported = client.get("/api/export/csv")
+
+    assert exported.status_code == 200
+    assert exported.headers["content-type"].startswith("text/csv")
+    assert "attachment" in exported.headers["content-disposition"]
+    assert "original" in exported.text
+    assert "subtle" in exported.text
