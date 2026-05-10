@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     model_provider: str = "openai"
     openai_api_key: str = ""
     openai_model: str = "gpt-4.1-mini"
+    openai_base_url: str = "https://api.openai.com/v1"
     frontend_dir: str = "../frontend"
 
     model_config = SettingsConfigDict(

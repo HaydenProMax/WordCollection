@@ -218,6 +218,7 @@ APP_ENV=development
 DATABASE_URL=postgresql+psycopg://encollect:encollect_dev_password@localhost:55432/encollect
 MODEL_PROVIDER=openai
 OPENAI_MODEL=gpt-4.1-mini
+OPENAI_BASE_URL=https://api.openai.com/v1
 OPENAI_API_KEY=
 ```
 
@@ -228,6 +229,7 @@ APP_ENV=production
 DATABASE_URL=postgresql+psycopg://encollect:<password>@127.0.0.1:5432/encollect
 MODEL_PROVIDER=openai
 OPENAI_MODEL=gpt-4.1-mini
+OPENAI_BASE_URL=https://api.openai.com/v1
 OPENAI_API_KEY=<secret>
 ```
 
@@ -316,3 +318,8 @@ Rollback:
 - Verified `GET /api/lookups` returns `200` with an empty list.
 - Verified missing `OPENAI_API_KEY` returns `502` and does not create a record.
 - Verified real PostgreSQL insert/read/delete path with a fake LLM provider.
+
+### 2026-05-10 Model Configuration
+
+- Added `OPENAI_BASE_URL` so OpenAI-compatible proxy endpoints can be used.
+- Documented custom model configuration such as `OPENAI_MODEL=gpt-5.5`.

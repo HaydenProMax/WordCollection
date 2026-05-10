@@ -14,6 +14,7 @@ class OpenAIProvider(LLMProvider):
     def __init__(self, settings: Settings):
         self.api_key = settings.openai_api_key
         self.model_name = settings.openai_model
+        self.base_url = settings.openai_base_url.rstrip("/")
 
     async def explain(self, text: str) -> LookupExplanation:
         if not self.api_key:
@@ -32,7 +33,7 @@ class OpenAIProvider(LLMProvider):
         try:
             async with httpx.AsyncClient(timeout=45) as client:
                 response = await client.post(
-                    "https://api.openai.com/v1/responses",
+                f"{self.base_url}/responses",
                     headers=headers,
                     json=payload,
                 )

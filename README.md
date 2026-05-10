@@ -48,10 +48,19 @@ APP_ENV=development
 DATABASE_URL=postgresql+psycopg://encollect:encollect_dev_password@localhost:55432/encollect
 MODEL_PROVIDER=openai
 OPENAI_MODEL=gpt-4.1-mini
+OPENAI_BASE_URL=https://api.openai.com/v1
 OPENAI_API_KEY=
 ```
 
 `OPENAI_API_KEY` is required for real lookups.
+
+For an OpenAI-compatible proxy, set `OPENAI_BASE_URL` to the API root that contains the `/responses` endpoint. For example:
+
+```text
+OPENAI_MODEL=gpt-5.5
+OPENAI_BASE_URL=https://www.fhl.mom/v1
+OPENAI_API_KEY=your_api_key
+```
 
 ## Git Flow
 
