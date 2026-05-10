@@ -68,7 +68,7 @@ Acceptance criteria:
 - [ ] Successful lookups are persisted.
 - [ ] History survives page refresh.
 - [ ] Missing OpenAI API key produces a clear error.
-- [ ] Tests pass on `dev`.
+- [x] Tests pass on `dev`.
 - [ ] `dev` is merged into `main`.
 - [ ] Release tag `v0.1.0` is created.
 
@@ -303,3 +303,6 @@ Rollback:
 - Added API tests with a fake LLM provider.
 - Verified `python -m compileall backend`.
 - Verified `python -m pytest`.
+- Initialized Git repository.
+- Created `main` and `dev` branches.
+- Committed the MVP scaffold on `dev` as `5caf96c`.
