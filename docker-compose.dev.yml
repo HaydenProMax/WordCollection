@@ -1,0 +1,22 @@
+# Development-only database service.
+# Production uses a native PostgreSQL service or managed PostgreSQL, not Docker Compose.
+services:
+  db:
+    image: postgres:16
+    container_name: encollect-dev-db
+    environment:
+      POSTGRES_DB: encollect
+      POSTGRES_USER: encollect
+      POSTGRES_PASSWORD: encollect_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - encollect_dev_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U encollect -d encollect"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  encollect_dev_pgdata:
