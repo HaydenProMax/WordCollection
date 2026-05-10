@@ -325,3 +325,19 @@ Rollback:
 - Documented custom model configuration such as `OPENAI_MODEL=gpt-5.5`.
 - Verified local `.env` is read correctly with `OPENAI_MODEL=gpt-5.5` and `OPENAI_BASE_URL=https://www.fhl.mom/v1`.
 - Verified the configured provider returns a valid structured explanation for `subtle`.
+
+### 2026-05-10 Local Browser Verification
+
+- Verified the full local browser flow at `http://127.0.0.1:8000/`.
+- Confirmed the startup commands below are the current stable local development flow.
+- Do not change these commands casually; only update them when the runtime structure changes intentionally.
+
+```bash
+cd /mnt/d/enCollect
+docker compose -f docker-compose.dev.yml up -d db
+docker compose -f docker-compose.dev.yml ps
+cd /mnt/d/enCollect/backend
+source .venv/bin/activate
+python -m alembic upgrade head
+python -m uvicorn app.main:app --reload
+```

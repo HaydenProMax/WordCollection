@@ -54,6 +54,33 @@ OPENAI_API_KEY=
 
 `OPENAI_API_KEY` is required for real lookups.
 
+## Verified Local Startup Commands
+
+These commands were verified during local testing. Do not change this startup flow casually; update it only when the project structure or runtime requirements truly change.
+
+From WSL:
+
+```bash
+cd /mnt/d/enCollect
+docker compose -f docker-compose.dev.yml up -d db
+docker compose -f docker-compose.dev.yml ps
+```
+
+Then:
+
+```bash
+cd /mnt/d/enCollect/backend
+source .venv/bin/activate
+python -m alembic upgrade head
+python -m uvicorn app.main:app --reload
+```
+
+Open:
+
+```text
+http://127.0.0.1:8000
+```
+
 For an OpenAI-compatible proxy, set `OPENAI_BASE_URL` to the API root that contains the `/responses` endpoint. For example:
 
 ```text
