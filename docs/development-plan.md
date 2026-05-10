@@ -323,3 +323,5 @@ Rollback:
 
 - Added `OPENAI_BASE_URL` so OpenAI-compatible proxy endpoints can be used.
 - Documented custom model configuration such as `OPENAI_MODEL=gpt-5.5`.
+- Verified local `.env` is read correctly with `OPENAI_MODEL=gpt-5.5` and `OPENAI_BASE_URL=https://www.fhl.mom/v1`.
+- Verified the configured provider returns a valid structured explanation for `subtle`.
