@@ -36,7 +36,7 @@ enCollect is a personal English lookup web app. A user enters an English word, p
 
 ### v0.1.0 - Core Lookup MVP
 
-Status: In progress
+Status: Released
 
 Goal: Complete the core personal lookup workflow.
 
@@ -122,7 +122,7 @@ Required features:
 - [x] Include language direction in JSON/CSV exports
 - [x] Verify migration against local PostgreSQL
 - [x] Verify Chinese-to-English provider response
-- [ ] Verify Chinese-to-English lookup in browser
+- [x] Verify Chinese-to-English lookup in browser
 
 Completed business additions:
 
@@ -417,6 +417,11 @@ python -m uvicorn app.main:app --reload
 - Added API tests for Chinese input.
 - Verified `python -m alembic upgrade head` against local PostgreSQL.
 - Verified real provider response for `我突然意识到我错了` returns `zh -> en`.
+
+### 2026-05-10 v0.4.0 Release
+
+- User verified Chinese-to-English lookup locally in the browser.
+- Closed `v0.4.0` with bidirectional lookup support.
 
 ### 2026-05-10 v0.3.0 Release
 
