@@ -88,7 +88,7 @@ Candidate features:
 
 ### v0.3.0 - Usability Polish
 
-Status: In progress
+Status: Released
 
 Goal: Improve daily-use ergonomics before adding heavier organization features.
 
@@ -97,8 +97,8 @@ Candidate features:
 - [x] Copy explanation
 - [x] Filter history by query type
 - [x] Better delete confirmation
-- [ ] Better loading states
-- [ ] Better empty states
+- [x] Better loading states
+- [x] Better empty states
 
 Deferred features:
 
@@ -390,3 +390,8 @@ python -m uvicorn app.main:app --reload
 - Added `GET /api/export/csv`.
 - Added JSON and CSV export links in the history panel.
 - Added API tests for both export formats.
+
+### 2026-05-10 v0.3.0 Release
+
+- User verified JSON and CSV export locally in the browser.
+- Closed `v0.3.0` with usability polish and export support.
