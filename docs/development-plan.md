@@ -108,7 +108,7 @@ Deferred features:
 
 ### v0.4.0 - Bidirectional Lookup
 
-Status: In progress
+Status: Released
 
 Goal: Support both English-to-Chinese explanation and Chinese-to-English expression lookup.
 
@@ -128,6 +128,20 @@ Completed business additions:
 
 - [x] Export JSON
 - [x] Export CSV
+
+### v0.5.0 - Frontend Layout Polish
+
+Status: Released
+
+Goal: Improve the app layout and make the history module easier to scan.
+
+Completed features:
+
+- [x] Reworked main app layout
+- [x] Reworked history sidebar layout
+- [x] Improved history item structure
+- [x] Improved responsive layout
+- [x] Preserved existing lookup, history, and export behavior
 
 ## Technical Decisions
 
@@ -409,6 +423,11 @@ python -m uvicorn app.main:app --reload
 - Added JSON and CSV export links in the history panel.
 - Added API tests for both export formats.
 
+### 2026-05-10 v0.3.0 Release
+
+- User verified JSON and CSV export locally in the browser.
+- Closed `v0.3.0` with usability polish and export support.
+
 ### 2026-05-10 v0.4.0 Bidirectional Lookup Start
 
 - Added `source_language` and `target_language` fields.
@@ -423,7 +442,7 @@ python -m uvicorn app.main:app --reload
 - User verified Chinese-to-English lookup locally in the browser.
 - Closed `v0.4.0` with bidirectional lookup support.
 
-### 2026-05-10 v0.3.0 Release
+### 2026-05-10 v0.5.0 Release
 
-- User verified JSON and CSV export locally in the browser.
-- Closed `v0.3.0` with usability polish and export support.
+- User completed and verified UI layout changes locally.
+- Released the UI layout polish as `v0.5.0`.
