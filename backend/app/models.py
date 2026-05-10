@@ -12,6 +12,8 @@ class Lookup(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     original: Mapped[str] = mapped_column(Text, nullable=False)
+    source_language: Mapped[str] = mapped_column(String(16), nullable=False, default="en")
+    target_language: Mapped[str] = mapped_column(String(16), nullable=False, default="zh")
     query_type: Mapped[str] = mapped_column(String(24), nullable=False)
     pronunciation: Mapped[str] = mapped_column(Text, nullable=False, default="")
     explanation: Mapped[str] = mapped_column(Text, nullable=False)

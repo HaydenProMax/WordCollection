@@ -15,6 +15,8 @@ router = APIRouter(prefix="/api/lookups", tags=["lookups"])
 def build_lookup(text: str, explanation, provider: LLMProvider) -> Lookup:
     return Lookup(
         original=text,
+        source_language=explanation.source_language,
+        target_language=explanation.target_language,
         query_type=explanation.query_type,
         pronunciation=explanation.pronunciation,
         explanation=explanation.explanation,
@@ -97,6 +99,8 @@ async def regenerate_lookup(
         raise HTTPException(status_code=502, detail=str(exc)) from exc
 
     lookup.query_type = explanation.query_type
+    lookup.source_language = explanation.source_language
+    lookup.target_language = explanation.target_language
     lookup.pronunciation = explanation.pronunciation
     lookup.explanation = explanation.explanation
     lookup.examples = [example.model_dump() for example in explanation.examples]

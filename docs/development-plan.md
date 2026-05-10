@@ -106,6 +106,24 @@ Deferred features:
 - [ ] Tags
 - [ ] Basic statistics
 
+### v0.4.0 - Bidirectional Lookup
+
+Status: In progress
+
+Goal: Support both English-to-Chinese explanation and Chinese-to-English expression lookup.
+
+Required features:
+
+- [x] Add `source_language` and `target_language` fields
+- [x] Add database migration for existing lookup records
+- [x] Update LLM schema and prompt for bidirectional lookup
+- [x] Persist language direction on create and regenerate
+- [x] Display language direction in result and history
+- [x] Include language direction in JSON/CSV exports
+- [x] Verify migration against local PostgreSQL
+- [x] Verify Chinese-to-English provider response
+- [ ] Verify Chinese-to-English lookup in browser
+
 Completed business additions:
 
 - [x] Export JSON
@@ -390,6 +408,15 @@ python -m uvicorn app.main:app --reload
 - Added `GET /api/export/csv`.
 - Added JSON and CSV export links in the history panel.
 - Added API tests for both export formats.
+
+### 2026-05-10 v0.4.0 Bidirectional Lookup Start
+
+- Added `source_language` and `target_language` fields.
+- Added Alembic migration `20260510_0002_add_lookup_languages`.
+- Updated provider prompt to support Chinese-to-English lookup.
+- Added API tests for Chinese input.
+- Verified `python -m alembic upgrade head` against local PostgreSQL.
+- Verified real provider response for `我突然意识到我错了` returns `zh -> en`.
 
 ### 2026-05-10 v0.3.0 Release
 

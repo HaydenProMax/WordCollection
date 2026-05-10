@@ -25,6 +25,8 @@ def export_json(db: Session = Depends(get_db)) -> Response:
         {
             "id": lookup.id,
             "original": lookup.original,
+            "source_language": lookup.source_language,
+            "target_language": lookup.target_language,
             "query_type": lookup.query_type,
             "pronunciation": lookup.pronunciation,
             "explanation": lookup.explanation,
@@ -52,6 +54,8 @@ def export_csv(db: Session = Depends(get_db)) -> Response:
         fieldnames=[
             "id",
             "original",
+            "source_language",
+            "target_language",
             "query_type",
             "pronunciation",
             "explanation",
@@ -68,6 +72,8 @@ def export_csv(db: Session = Depends(get_db)) -> Response:
             {
                 "id": lookup.id,
                 "original": lookup.original,
+                "source_language": lookup.source_language,
+                "target_language": lookup.target_language,
                 "query_type": lookup.query_type,
                 "pronunciation": lookup.pronunciation,
                 "explanation": lookup.explanation,

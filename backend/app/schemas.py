@@ -5,6 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 QueryType = Literal["word", "phrase", "sentence"]
+Language = Literal["en", "zh"]
 
 
 class ExampleSentence(BaseModel):
@@ -18,6 +19,8 @@ class LookupCreate(BaseModel):
 
 class LookupExplanation(BaseModel):
     original: str = Field(min_length=1)
+    source_language: Language = "en"
+    target_language: Language = "zh"
     query_type: QueryType
     pronunciation: str = ""
     explanation: str = Field(min_length=1)
@@ -28,6 +31,8 @@ class LookupExplanation(BaseModel):
 class LookupRead(BaseModel):
     id: int
     original: str
+    source_language: Language
+    target_language: Language
     query_type: QueryType
     pronunciation: str
     explanation: str

@@ -20,9 +20,12 @@ class FakeProvider:
 
     async def explain(self, text: str) -> LookupExplanation:
         self.calls += 1
-        query_type = "sentence" if " " in text else "word"
+        is_chinese = any("\u4e00" <= char <= "\u9fff" for char in text)
+        query_type = "sentence" if " " in text or is_chinese else "word"
         return LookupExplanation(
             original=text,
+            source_language="zh" if is_chinese else "en",
+            target_language="en" if is_chinese else "zh",
             query_type=query_type,
             pronunciation="/test/",
             explanation=f"Test explanation {self.calls}.",
@@ -74,6 +77,19 @@ def test_create_and_list_lookup() -> None:
 
     assert listed.status_code == 200
     assert listed.json()["items"][0]["original"] == "subtle"
+
+
+def test_create_chinese_to_english_lookup() -> None:
+    client = build_client()
+
+    created = client.post("/api/lookups", json={"text": "我突然意识到我错了"})
+
+    assert created.status_code == 200
+    body = created.json()
+    assert body["original"] == "我突然意识到我错了"
+    assert body["source_language"] == "zh"
+    assert body["target_language"] == "en"
+    assert body["query_type"] == "sentence"
 
 
 def test_search_lookup_history() -> None:
@@ -137,6 +153,7 @@ def test_export_json() -> None:
     assert exported.headers["content-type"].startswith("application/json")
     assert "attachment" in exported.headers["content-disposition"]
     assert exported.json()["items"][0]["original"] == "subtle"
+    assert exported.json()["items"][0]["source_language"] == "en"
 
 
 def test_export_csv() -> None:
@@ -149,4 +166,5 @@ def test_export_csv() -> None:
     assert exported.headers["content-type"].startswith("text/csv")
     assert "attachment" in exported.headers["content-disposition"]
     assert "original" in exported.text
+    assert "source_language" in exported.text
     assert "subtle" in exported.text

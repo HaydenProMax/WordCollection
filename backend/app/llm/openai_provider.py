@@ -33,7 +33,7 @@ class OpenAIProvider(LLMProvider):
         try:
             async with httpx.AsyncClient(timeout=45) as client:
                 response = await client.post(
-                f"{self.base_url}/responses",
+                    f"{self.base_url}/responses",
                     headers=headers,
                     json=payload,
                 )
@@ -59,14 +59,19 @@ class OpenAIProvider(LLMProvider):
     def _build_prompt(self, text: str) -> str:
         return f"""
 You are an English learning assistant for a native Chinese speaker.
+You support bidirectional lookup:
+- If the input is English, explain it in Chinese.
+- If the input is Chinese, provide natural English expressions for it.
 Return only valid JSON. Do not return Markdown. Do not include any text outside JSON.
 
 Required JSON schema:
 {{
   "original": "string",
+  "source_language": "en | zh",
+  "target_language": "zh | en",
   "query_type": "word | phrase | sentence",
-  "pronunciation": "string, use IPA for words or phrases; empty string for long sentences if unsuitable",
-  "explanation": "Chinese explanation",
+  "pronunciation": "string, use IPA for English words or phrases; empty string if unsuitable",
+  "explanation": "For English input, write a Chinese explanation. For Chinese input, give the most natural English expression and explain usage differences in Chinese when there are alternatives.",
   "examples": [
     {{
       "english": "natural English example",
@@ -80,6 +85,9 @@ Rules:
 - Provide 2 examples for words and phrases.
 - Provide 1-2 examples for sentences.
 - Infer whether the input is a word, phrase, or sentence.
+- For Chinese input, set source_language to "zh" and target_language to "en".
+- For English input, set source_language to "en" and target_language to "zh".
+- For Chinese input with multiple natural English options, mention 2-4 options in explanation, then provide examples using the best options.
 
 Input:
 {text}

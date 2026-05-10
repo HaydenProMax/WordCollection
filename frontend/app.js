@@ -28,6 +28,13 @@ function queryTypeLabel(type) {
   return labels[type] || "英文";
 }
 
+function languageDirectionLabel(item) {
+  if (item.source_language === "zh" && item.target_language === "en") {
+    return "中文 → 英文";
+  }
+  return "英文 → 中文";
+}
+
 function formatDate(value) {
   return new Intl.DateTimeFormat("zh-CN", {
     month: "2-digit",
@@ -63,7 +70,7 @@ function renderLookup(item) {
 
   const badge = document.createElement("span");
   badge.className = "badge";
-  badge.textContent = queryTypeLabel(item.query_type);
+  badge.textContent = `${languageDirectionLabel(item)} · ${queryTypeLabel(item.query_type)}`;
 
   title.append(original, badge);
   result.append(title);
@@ -115,7 +122,7 @@ function renderHistory(items) {
 
     const meta = document.createElement("span");
     meta.className = "history-meta";
-    meta.innerHTML = `<span>${queryTypeLabel(item.query_type)}</span><span>${formatDate(item.created_at)}</span>`;
+    meta.innerHTML = `<span>${languageDirectionLabel(item)} · ${queryTypeLabel(item.query_type)}</span><span>${formatDate(item.created_at)}</span>`;
 
     const actions = document.createElement("span");
     actions.className = "history-actions";
