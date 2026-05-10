@@ -145,7 +145,7 @@ Completed features:
 
 ### v0.6.0 - Record Editing
 
-Status: In progress
+Status: Released
 
 Goal: Let the user turn model output into personally curated records.
 
@@ -158,7 +158,7 @@ Required features:
 - [x] Save edited record
 - [x] Cancel editing
 - [x] API test coverage
-- [ ] Browser verification
+- [x] Browser verification
 
 ## Technical Decisions
 
@@ -470,3 +470,8 @@ python -m uvicorn app.main:app --reload
 - Added edit mode for the currently displayed lookup.
 - Added editable pronunciation, explanation, and examples JSON.
 - Added API test coverage for record updates.
+
+### 2026-05-10 v0.6.0 Release
+
+- User verified record editing locally in the browser.
+- Closed `v0.6.0` with manual curation support for saved lookups.
