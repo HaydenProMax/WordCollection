@@ -69,8 +69,8 @@ Acceptance criteria:
 - [x] History survives page refresh.
 - [ ] Missing OpenAI API key produces a clear error.
 - [x] Tests pass on `dev`.
-- [ ] `dev` is merged into `main`.
-- [ ] Release tag `v0.1.0` is created.
+- [x] `dev` is merged into `main`.
+- [x] Release tag `v0.1.0` is created.
 
 ### v0.2.0 - History Management
 
@@ -342,3 +342,8 @@ source .venv/bin/activate
 python -m alembic upgrade head
 python -m uvicorn app.main:app --reload
 ```
+
+### 2026-05-10 v0.1.0 Release
+
+- Merged `dev` into `main`.
+- Released the first stable local MVP as `v0.1.0`.
