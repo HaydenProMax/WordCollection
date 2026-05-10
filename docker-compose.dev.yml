@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: encollect
       POSTGRES_PASSWORD: encollect_dev_password
     ports:
-      - "5432:5432"
+      - "55432:5432"
     volumes:
       - encollect_dev_pgdata:/var/lib/postgresql/data
     healthcheck:

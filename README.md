@@ -45,7 +45,7 @@ http://127.0.0.1:8000
 
 ```text
 APP_ENV=development
-DATABASE_URL=postgresql+psycopg://encollect:encollect_dev_password@localhost:5432/encollect
+DATABASE_URL=postgresql+psycopg://encollect:encollect_dev_password@localhost:55432/encollect
 MODEL_PROVIDER=openai
 OPENAI_MODEL=gpt-4.1-mini
 OPENAI_API_KEY=

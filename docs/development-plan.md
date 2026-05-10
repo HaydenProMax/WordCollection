@@ -61,8 +61,8 @@ Required features:
 Acceptance criteria:
 
 - [ ] App starts from WSL.
-- [ ] Local Docker PostgreSQL is reachable.
-- [ ] Database migrations run from an empty database.
+- [x] Local Docker PostgreSQL is reachable.
+- [x] Database migrations run from an empty database.
 - [ ] A word lookup returns original text, pronunciation, explanation, and examples.
 - [ ] A sentence lookup returns original text, explanation, and examples.
 - [ ] Successful lookups are persisted.
@@ -215,7 +215,7 @@ Development:
 
 ```text
 APP_ENV=development
-DATABASE_URL=postgresql+psycopg://encollect:encollect_dev_password@localhost:5432/encollect
+DATABASE_URL=postgresql+psycopg://encollect:encollect_dev_password@localhost:55432/encollect
 MODEL_PROVIDER=openai
 OPENAI_MODEL=gpt-4.1-mini
 OPENAI_API_KEY=
@@ -306,3 +306,13 @@ Rollback:
 - Initialized Git repository.
 - Created `main` and `dev` branches.
 - Committed the MVP scaffold on `dev` as `5caf96c`.
+
+### 2026-05-10 Local Database Integration
+
+- Found existing PostgreSQL containers on ports `5432` and `54329` that belong to other projects.
+- Moved enCollect development PostgreSQL to port `55432` to avoid conflicts.
+- Started `encollect-dev-db` with `docker-compose.dev.yml`.
+- Ran `python -m alembic upgrade head` successfully against PostgreSQL.
+- Verified `GET /api/lookups` returns `200` with an empty list.
+- Verified missing `OPENAI_API_KEY` returns `502` and does not create a record.
+- Verified real PostgreSQL insert/read/delete path with a fake LLM provider.

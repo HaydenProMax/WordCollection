@@ -5,6 +5,7 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 *.db
+*.log
 node_modules/
 dist/
 build/
