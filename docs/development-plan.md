@@ -160,6 +160,22 @@ Required features:
 - [x] API test coverage
 - [x] Browser verification
 
+### v1.0.0 - First Production Release
+
+Status: Released
+
+Goal: Establish the first production-ready release for deployment.
+
+Release scope:
+
+- [x] Bidirectional Chinese-English lookup
+- [x] Lookup history
+- [x] Search, delete, regenerate, and edit saved records
+- [x] JSON and CSV export
+- [x] Local PostgreSQL migration verified
+- [x] Stable startup commands documented
+- [x] Automated tests passing
+
 ## Technical Decisions
 
 | Area | Decision | Reason | Alternative |
@@ -475,3 +491,9 @@ python -m uvicorn app.main:app --reload
 
 - User verified record editing locally in the browser.
 - Closed `v0.6.0` with manual curation support for saved lookups.
+
+### 2026-05-10 v1.0.0 Release
+
+- Promoted the current app to the first production-ready release.
+- Included the final app copy update: `中英互译助手`.
+- Verified `python -m pytest` before release.
