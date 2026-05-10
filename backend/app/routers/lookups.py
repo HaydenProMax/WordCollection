@@ -6,7 +6,7 @@ from app.database import get_db
 from app.llm.base import LLMProvider
 from app.llm.provider_factory import get_llm_provider
 from app.models import Lookup
-from app.schemas import LookupCreate, LookupList, LookupRead
+from app.schemas import LookupCreate, LookupList, LookupRead, LookupUpdate
 
 
 router = APIRouter(prefix="/api/lookups", tags=["lookups"])
@@ -71,6 +71,29 @@ def get_lookup(lookup_id: int, db: Session = Depends(get_db)) -> Lookup:
     lookup = db.get(Lookup, lookup_id)
     if lookup is None:
         raise HTTPException(status_code=404, detail="Lookup not found.")
+    return lookup
+
+
+@router.patch("/{lookup_id}", response_model=LookupRead)
+def update_lookup(
+    lookup_id: int,
+    payload: LookupUpdate,
+    db: Session = Depends(get_db),
+) -> Lookup:
+    lookup = db.get(Lookup, lookup_id)
+    if lookup is None:
+        raise HTTPException(status_code=404, detail="Lookup not found.")
+
+    changes = payload.model_dump(exclude_unset=True)
+    if "pronunciation" in changes:
+        lookup.pronunciation = changes["pronunciation"] or ""
+    if "explanation" in changes:
+        lookup.explanation = changes["explanation"]
+    if "examples" in changes:
+        lookup.examples = [example.model_dump() for example in payload.examples or []]
+
+    db.commit()
+    db.refresh(lookup)
     return lookup
 
 

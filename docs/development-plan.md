@@ -143,6 +143,23 @@ Completed features:
 - [x] Improved responsive layout
 - [x] Preserved existing lookup, history, and export behavior
 
+### v0.6.0 - Record Editing
+
+Status: In progress
+
+Goal: Let the user turn model output into personally curated records.
+
+Required features:
+
+- [x] Add `PATCH /api/lookups/{id}`
+- [x] Edit pronunciation
+- [x] Edit explanation
+- [x] Edit examples
+- [x] Save edited record
+- [x] Cancel editing
+- [x] API test coverage
+- [ ] Browser verification
+
 ## Technical Decisions
 
 | Area | Decision | Reason | Alternative |
@@ -446,3 +463,10 @@ python -m uvicorn app.main:app --reload
 
 - User completed and verified UI layout changes locally.
 - Released the UI layout polish as `v0.5.0`.
+
+### 2026-05-10 v0.6.0 Record Editing Start
+
+- Added `PATCH /api/lookups/{id}`.
+- Added edit mode for the currently displayed lookup.
+- Added editable pronunciation, explanation, and examples JSON.
+- Added API test coverage for record updates.

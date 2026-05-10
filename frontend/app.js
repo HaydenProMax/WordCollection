@@ -9,12 +9,14 @@ const refreshHistory = document.querySelector("#refresh-history");
 const historySearch = document.querySelector("#history-search");
 const typeFilter = document.querySelector(".type-filter");
 const copyResult = document.querySelector("#copy-result");
+const editResult = document.querySelector("#edit-result");
 
 let selectedLookupId = null;
 let selectedLookup = null;
 let selectedType = "";
 let pendingDeleteId = null;
 let searchTimer = null;
+let isEditing = false;
 
 function setStatus(text) {
   statusText.textContent = text;
@@ -53,6 +55,7 @@ function renderError(message) {
 function renderEmpty(message) {
   selectedLookupId = null;
   selectedLookup = null;
+  isEditing = false;
   result.textContent = message;
   result.className = "result empty";
 }
@@ -60,6 +63,7 @@ function renderEmpty(message) {
 function renderLookup(item) {
   selectedLookupId = item.id;
   selectedLookup = item;
+  isEditing = false;
   result.className = "result";
   result.innerHTML = "";
 
@@ -101,6 +105,113 @@ function renderLookup(item) {
     }
     result.append(list);
   }
+}
+
+function renderEditForm(item) {
+  if (!item) {
+    setStatus("没有可编辑的记录");
+    return;
+  }
+
+  isEditing = true;
+  result.className = "result";
+  result.innerHTML = "";
+
+  const form = document.createElement("form");
+  form.className = "edit-form";
+
+  const pronunciation = document.createElement("input");
+  pronunciation.name = "pronunciation";
+  pronunciation.value = item.pronunciation || "";
+
+  const explanation = document.createElement("textarea");
+  explanation.name = "explanation";
+  explanation.rows = 6;
+  explanation.required = true;
+  explanation.value = item.explanation || "";
+
+  const examples = document.createElement("textarea");
+  examples.name = "examples";
+  examples.rows = 8;
+  examples.value = JSON.stringify(item.examples ?? [], null, 2);
+
+  const pronunciationLabel = document.createElement("label");
+  pronunciationLabel.textContent = "发音";
+  pronunciationLabel.append(pronunciation);
+
+  const explanationLabel = document.createElement("label");
+  explanationLabel.textContent = "解释";
+  explanationLabel.append(explanation);
+
+  const examplesLabel = document.createElement("label");
+  examplesLabel.textContent = "例句 JSON";
+  examplesLabel.append(examples);
+
+  const actions = document.createElement("div");
+  actions.className = "edit-actions";
+
+  const cancel = document.createElement("button");
+  cancel.type = "button";
+  cancel.className = "btn btn-secondary";
+  cancel.textContent = "取消";
+  cancel.addEventListener("click", () => {
+    renderLookup(item);
+    setStatus("已取消编辑");
+  });
+
+  const save = document.createElement("button");
+  save.type = "submit";
+  save.className = "btn btn-primary";
+  save.textContent = "保存";
+
+  actions.append(cancel, save);
+  form.append(pronunciationLabel, explanationLabel, examplesLabel, actions);
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    await saveLookupEdits(item.id, {
+      pronunciation: pronunciation.value.trim(),
+      explanation: explanation.value.trim(),
+      examples: examples.value.trim(),
+    });
+  });
+
+  result.append(form);
+  setStatus("正在编辑");
+}
+
+async function saveLookupEdits(id, values) {
+  let parsedExamples = [];
+  try {
+    parsedExamples = values.examples ? JSON.parse(values.examples) : [];
+  } catch {
+    renderError("例句 JSON 格式不正确。");
+    setStatus("保存失败");
+    return;
+  }
+
+  setStatus("正在保存");
+  const response = await fetch(`/api/lookups/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      pronunciation: values.pronunciation,
+      explanation: values.explanation,
+      examples: parsedExamples,
+    }),
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    renderError(data.detail || "保存失败。");
+    setStatus("保存失败");
+    return;
+  }
+
+  queryInput.value = data.original;
+  updateCount();
+  renderLookup(data);
+  setStatus("已保存修改");
+  await loadHistory();
 }
 
 function renderHistory(items) {
@@ -317,6 +428,19 @@ copyResult.addEventListener("click", async () => {
     renderError("复制失败，请手动选择文本。");
     setStatus("复制失败");
   }
+});
+
+editResult.addEventListener("click", () => {
+  if (!selectedLookup) {
+    setStatus("没有可编辑的记录");
+    return;
+  }
+  if (isEditing) {
+    renderLookup(selectedLookup);
+    setStatus("已退出编辑");
+    return;
+  }
+  renderEditForm(selectedLookup);
 });
 
 form.addEventListener("submit", async (event) => {

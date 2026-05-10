@@ -131,6 +131,31 @@ def test_delete_lookup() -> None:
     assert listed.json()["items"] == []
 
 
+def test_update_lookup() -> None:
+    client = build_client()
+    created = client.post("/api/lookups", json={"text": "subtle"}).json()
+
+    updated = client.patch(
+        f"/api/lookups/{created['id']}",
+        json={
+            "pronunciation": "/edited/",
+            "explanation": "Edited explanation.",
+            "examples": [
+                {
+                    "english": "Edited example.",
+                    "chinese": "Edited example.",
+                }
+            ],
+        },
+    )
+
+    assert updated.status_code == 200
+    body = updated.json()
+    assert body["pronunciation"] == "/edited/"
+    assert body["explanation"] == "Edited explanation."
+    assert body["examples"][0]["english"] == "Edited example."
+
+
 def test_regenerate_lookup_updates_existing_record() -> None:
     client = build_client()
     created = client.post("/api/lookups", json={"text": "subtle"}).json()

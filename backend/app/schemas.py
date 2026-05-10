@@ -17,6 +17,12 @@ class LookupCreate(BaseModel):
     text: str = Field(min_length=1, max_length=1200)
 
 
+class LookupUpdate(BaseModel):
+    pronunciation: str | None = Field(default=None, max_length=500)
+    explanation: str | None = Field(default=None, min_length=1, max_length=8000)
+    examples: list[ExampleSentence] | None = None
+
+
 class LookupExplanation(BaseModel):
     original: str = Field(min_length=1)
     source_language: Language = "en"
