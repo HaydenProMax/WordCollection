@@ -9,6 +9,7 @@ const refreshHistory = document.querySelector("#refresh-history");
 const historySearch = document.querySelector("#history-search");
 const typeFilter = document.querySelector(".type-filter");
 const copyResult = document.querySelector("#copy-result");
+
 let selectedLookupId = null;
 let selectedLookup = null;
 let selectedType = "";
@@ -30,9 +31,9 @@ function queryTypeLabel(type) {
 
 function languageDirectionLabel(item) {
   if (item.source_language === "zh" && item.target_language === "en") {
-    return "中文 → 英文";
+    return "中文 -> 英文";
   }
-  return "英文 → 中文";
+  return "英文 -> 中文";
 }
 
 function formatDate(value) {
@@ -113,16 +114,24 @@ function renderHistory(items) {
   }
 
   for (const item of items) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "history-item";
+    const historyItem = document.createElement("article");
+    historyItem.className = "history-item";
+    historyItem.role = "button";
+    historyItem.tabIndex = 0;
 
     const title = document.createElement("strong");
     title.textContent = item.original;
 
     const meta = document.createElement("span");
     meta.className = "history-meta";
-    meta.innerHTML = `<span>${languageDirectionLabel(item)} · ${queryTypeLabel(item.query_type)}</span><span>${formatDate(item.created_at)}</span>`;
+
+    const type = document.createElement("span");
+    type.textContent = `${languageDirectionLabel(item)} · ${queryTypeLabel(item.query_type)}`;
+
+    const time = document.createElement("span");
+    time.textContent = formatDate(item.created_at);
+
+    meta.append(type, time);
 
     const actions = document.createElement("span");
     actions.className = "history-actions";
@@ -144,9 +153,7 @@ function renderHistory(items) {
       await deleteLookup(item.id);
     });
 
-    actions.append(regenerate, remove);
-    button.append(title, meta, actions);
-    button.addEventListener("click", async () => {
+    async function openHistoryItem() {
       const response = await fetch(`/api/lookups/${item.id}`);
       const detail = await response.json();
       if (!response.ok) {
@@ -157,8 +164,19 @@ function renderHistory(items) {
       updateCount();
       renderLookup(detail);
       setStatus("已打开历史记录");
+    }
+
+    actions.append(regenerate, remove);
+    historyItem.append(title, meta, actions);
+    historyItem.addEventListener("click", openHistoryItem);
+    historyItem.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openHistoryItem();
+      }
     });
-    historyList.append(button);
+
+    historyList.append(historyItem);
   }
 }
 
@@ -280,7 +298,7 @@ copyResult.addEventListener("click", async () => {
     return;
   }
 
-  const examples = selectedLookup.examples
+  const examples = (selectedLookup.examples ?? [])
     .map((example) => `- ${example.english}\n  ${example.chinese}`)
     .join("\n");
   const text = [

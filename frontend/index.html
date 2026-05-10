@@ -3,46 +3,45 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>enCollect</title>
+    <title>enCollect - 个人英语查询与收藏工具</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <main class="shell">
-      <section class="workspace" aria-labelledby="page-title">
-        <div class="intro">
-          <p class="eyebrow">AI English Notebook</p>
-          <h1 id="page-title">enCollect</h1>
-          <p class="summary">输入不懂的英文单词、短语或句子，获取固定格式解释，并自动保存记录。</p>
-        </div>
+    <main class="app-container">
+      <section class="main-content" aria-labelledby="page-title">
+        <header class="main-header">
+          <h1 id="page-title" class="logo">enCollect</h1>
+          <p class="subtitle">输入单词、短语或句子，获取详细解释并自动保存记录。</p>
+        </header>
 
-        <form id="lookup-form" class="lookup-panel">
-          <label for="query">英文内容</label>
+        <form id="lookup-form" class="input-card">
+          <div class="input-header">
+            <label for="query">英文内容</label>
+            <span id="char-count" class="word-count">0 / 1200</span>
+          </div>
           <textarea
             id="query"
             name="query"
             rows="6"
             maxlength="1200"
-            placeholder="例如：subtle / It dawned on me that I was wrong."
+            placeholder="在此输入需要查询的内容，例如：subtle / It dawned on me that I was wrong."
             required
           ></textarea>
-          <div class="form-row">
-            <span id="char-count">0 / 1200</span>
-            <button type="submit" id="submit-button">
-              <span class="button-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" role="img">
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </span>
+          <div class="input-footer">
+            <button type="submit" id="submit-button" class="btn btn-primary">
               查询解释
+              <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
             </button>
           </div>
         </form>
 
-        <section class="result-panel" aria-live="polite">
-          <div class="panel-heading">
+        <section class="result-card" aria-live="polite">
+          <div class="result-header">
             <h2>本次解释</h2>
             <div class="result-tools">
-              <button type="button" id="copy-result" aria-label="复制解释" title="复制解释">
+              <button type="button" id="copy-result" class="btn-icon" aria-label="复制解释" title="复制解释">
                 <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
                   <rect x="8" y="8" width="11" height="11" rx="2" />
                   <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
@@ -55,28 +54,32 @@
         </section>
       </section>
 
-      <aside class="history-panel" aria-labelledby="history-title">
-        <div class="panel-heading">
+      <aside class="history-sidebar" aria-labelledby="history-title">
+        <header class="sidebar-header">
           <h2 id="history-title">查询记录</h2>
           <div class="history-tools">
             <a class="export-link" href="/api/export/json" title="导出 JSON">JSON</a>
             <a class="export-link" href="/api/export/csv" title="导出 CSV">CSV</a>
-            <button type="button" id="refresh-history" aria-label="刷新查询记录" title="刷新查询记录">
+            <button type="button" id="refresh-history" class="btn-icon small" aria-label="刷新查询记录" title="刷新查询记录">
               <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
                 <path d="M21 12a9 9 0 1 1-2.64-6.36" />
                 <path d="M21 4v6h-6" />
               </svg>
             </button>
           </div>
+        </header>
+
+        <div class="filter-bar">
+          <label class="search-label" for="history-search">搜索记录</label>
+          <input id="history-search" class="history-search" type="search" placeholder="输入关键词..." />
+          <div class="type-filter" aria-label="按类型筛选历史记录">
+            <button type="button" class="active" data-type="">全部</button>
+            <button type="button" data-type="word">单词</button>
+            <button type="button" data-type="phrase">短语</button>
+            <button type="button" data-type="sentence">句子</button>
+          </div>
         </div>
-        <label class="search-label" for="history-search">搜索记录</label>
-        <input id="history-search" class="history-search" type="search" placeholder="输入关键词" />
-        <div class="type-filter" aria-label="按类型筛选历史记录">
-          <button type="button" class="active" data-type="">全部</button>
-          <button type="button" data-type="word">单词</button>
-          <button type="button" data-type="phrase">短语</button>
-          <button type="button" data-type="sentence">句子</button>
-        </div>
+
         <div id="history-list" class="history-list"></div>
       </aside>
     </main>
