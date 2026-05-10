@@ -52,11 +52,14 @@ def list_lookups(
     limit: int = Query(default=30, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
     q: str | None = Query(default=None, max_length=120),
+    query_type: str | None = Query(default=None, pattern="^(word|phrase|sentence)$"),
     db: Session = Depends(get_db),
 ) -> dict:
     statement = select(Lookup)
     if q and q.strip():
         statement = statement.where(Lookup.original.ilike(f"%{q.strip()}%"))
+    if query_type:
+        statement = statement.where(Lookup.query_type == query_type)
     statement = statement.order_by(Lookup.created_at.desc()).limit(limit).offset(offset)
     return {"items": db.scalars(statement).all()}
 

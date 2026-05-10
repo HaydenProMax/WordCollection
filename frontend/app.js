@@ -7,7 +7,12 @@ const result = document.querySelector("#result");
 const historyList = document.querySelector("#history-list");
 const refreshHistory = document.querySelector("#refresh-history");
 const historySearch = document.querySelector("#history-search");
+const typeFilter = document.querySelector(".type-filter");
+const copyResult = document.querySelector("#copy-result");
 let selectedLookupId = null;
+let selectedLookup = null;
+let selectedType = "";
+let pendingDeleteId = null;
 let searchTimer = null;
 
 function setStatus(text) {
@@ -38,12 +43,15 @@ function renderError(message) {
 }
 
 function renderEmpty(message) {
+  selectedLookupId = null;
+  selectedLookup = null;
   result.textContent = message;
   result.className = "result empty";
 }
 
 function renderLookup(item) {
   selectedLookupId = item.id;
+  selectedLookup = item;
   result.className = "result";
   result.innerHTML = "";
 
@@ -123,7 +131,7 @@ function renderHistory(items) {
     const remove = document.createElement("button");
     remove.type = "button";
     remove.className = "danger-button";
-    remove.textContent = "删除";
+    remove.textContent = pendingDeleteId === item.id ? "确认删除" : "删除";
     remove.addEventListener("click", async (event) => {
       event.stopPropagation();
       await deleteLookup(item.id);
@@ -148,10 +156,18 @@ function renderHistory(items) {
 }
 
 async function loadHistory() {
+  const items = await fetchHistoryItems();
+  renderHistory(items);
+}
+
+async function fetchHistoryItems() {
   const params = new URLSearchParams();
   const q = historySearch.value.trim();
   if (q) {
     params.set("q", q);
+  }
+  if (selectedType) {
+    params.set("query_type", selectedType);
   }
   const url = params.toString() ? `/api/lookups?${params}` : "/api/lookups";
   const response = await fetch(url);
@@ -159,12 +175,14 @@ async function loadHistory() {
   if (!response.ok) {
     throw new Error(data.detail || "读取历史记录失败。");
   }
-  renderHistory(data.items ?? []);
+  return data.items ?? [];
 }
 
 async function deleteLookup(id) {
-  const confirmed = window.confirm("确认删除这条记录吗？");
-  if (!confirmed) {
+  if (pendingDeleteId !== id) {
+    pendingDeleteId = id;
+    setStatus("再次点击确认删除");
+    renderHistory(await fetchHistoryItems());
     return;
   }
 
@@ -180,9 +198,9 @@ async function deleteLookup(id) {
   }
 
   if (selectedLookupId === id) {
-    selectedLookupId = null;
     renderEmpty("解释结果会显示在这里。");
   }
+  pendingDeleteId = null;
   setStatus("已删除");
   await loadHistory();
 }
@@ -224,12 +242,56 @@ refreshHistory.addEventListener("click", async () => {
 });
 
 historySearch.addEventListener("input", () => {
+  pendingDeleteId = null;
   window.clearTimeout(searchTimer);
   searchTimer = window.setTimeout(() => {
     loadHistory().catch((error) => {
       renderError(error.message);
     });
   }, 220);
+});
+
+typeFilter.addEventListener("click", (event) => {
+  const button = event.target.closest("button");
+  if (!button) {
+    return;
+  }
+
+  selectedType = button.dataset.type;
+  pendingDeleteId = null;
+  for (const item of typeFilter.querySelectorAll("button")) {
+    item.classList.toggle("active", item === button);
+  }
+  loadHistory().catch((error) => {
+    renderError(error.message);
+  });
+});
+
+copyResult.addEventListener("click", async () => {
+  if (!selectedLookup) {
+    setStatus("没有可复制的解释");
+    return;
+  }
+
+  const examples = selectedLookup.examples
+    .map((example) => `- ${example.english}\n  ${example.chinese}`)
+    .join("\n");
+  const text = [
+    selectedLookup.original,
+    selectedLookup.pronunciation,
+    selectedLookup.explanation,
+    examples,
+  ]
+    .filter(Boolean)
+    .join("\n\n");
+
+  try {
+    await navigator.clipboard.writeText(text);
+    setStatus("已复制");
+  } catch {
+    renderError("复制失败，请手动选择文本。");
+    setStatus("复制失败");
+  }
 });
 
 form.addEventListener("submit", async (event) => {

@@ -151,6 +151,12 @@ textarea:focus {
   gap: 12px;
 }
 
+.result-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
 #char-count,
 #status {
   color: var(--muted);
@@ -284,14 +290,43 @@ svg {
 }
 
 #refresh-history {
+.result-tools button,
+#refresh-history {
   width: 42px;
   padding: 0;
   background: #e0e7ff;
   color: var(--primary-dark);
 }
 
+#copy-result {
+  min-height: 34px;
+  width: 34px;
+}
+
+.result-tools button:hover,
 #refresh-history:hover {
   background: #c7d2fe;
+}
+
+.type-filter {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.type-filter button {
+  min-height: 34px;
+  border: 1px solid #c7d2fe;
+  padding: 0 8px;
+  background: #ffffff;
+  color: var(--primary-dark);
+  font-size: 12px;
+}
+
+.type-filter button.active {
+  background: var(--primary);
+  color: #ffffff;
 }
 
 .history-list {

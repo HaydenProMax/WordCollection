@@ -86,13 +86,21 @@ Candidate features:
 - [x] Update lookup explanation after regeneration
 - [x] Better empty/error/loading states
 
-### v0.3.0 - Organization and Export
+### v0.3.0 - Usability Polish
 
-Status: Backlog
+Status: In progress
 
-Goal: Improve long-term personal use.
+Goal: Improve daily-use ergonomics before adding heavier organization features.
 
 Candidate features:
+
+- [x] Copy explanation
+- [x] Filter history by query type
+- [x] Better delete confirmation
+- [ ] Better loading states
+- [ ] Better empty states
+
+Deferred features:
 
 - [ ] Favorite lookup
 - [ ] Tags
@@ -360,3 +368,15 @@ python -m uvicorn app.main:app --reload
 
 - User verified history search, delete, and regenerate locally in the browser.
 - Prepared `v0.2.0` for merge into `main`.
+
+### 2026-05-10 v0.3.0 Replanning
+
+- Replanned `v0.3.0` from organization/export features to usability polish.
+- Deferred favorites, tags, export, and statistics until real usage shows they are needed.
+
+### 2026-05-10 v0.3.0 Usability Polish Start
+
+- Added copy explanation action for the currently displayed lookup.
+- Added history filtering by query type.
+- Replaced browser delete prompt with an in-page second-click confirmation.
+- Added API support and tests for `query_type` history filtering.

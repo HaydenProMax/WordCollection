@@ -41,7 +41,15 @@
         <section class="result-panel" aria-live="polite">
           <div class="panel-heading">
             <h2>本次解释</h2>
-            <span id="status">等待输入</span>
+            <div class="result-tools">
+              <button type="button" id="copy-result" aria-label="复制解释" title="复制解释">
+                <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+                  <rect x="8" y="8" width="11" height="11" rx="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+              </button>
+              <span id="status">等待输入</span>
+            </div>
           </div>
           <article id="result" class="result empty">解释结果会显示在这里。</article>
         </section>
@@ -59,6 +67,12 @@
         </div>
         <label class="search-label" for="history-search">搜索记录</label>
         <input id="history-search" class="history-search" type="search" placeholder="输入关键词" />
+        <div class="type-filter" aria-label="按类型筛选历史记录">
+          <button type="button" class="active" data-type="">全部</button>
+          <button type="button" data-type="word">单词</button>
+          <button type="button" data-type="phrase">短语</button>
+          <button type="button" data-type="sentence">句子</button>
+        </div>
         <div id="history-list" class="history-list"></div>
       </aside>
     </main>

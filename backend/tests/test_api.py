@@ -20,9 +20,10 @@ class FakeProvider:
 
     async def explain(self, text: str) -> LookupExplanation:
         self.calls += 1
+        query_type = "sentence" if " " in text else "word"
         return LookupExplanation(
             original=text,
-            query_type="word",
+            query_type=query_type,
             pronunciation="/test/",
             explanation=f"Test explanation {self.calls}.",
             examples=[
@@ -82,6 +83,20 @@ def test_search_lookup_history() -> None:
     client.post("/api/lookups", json={"text": "dawn on"})
 
     found = client.get("/api/lookups", params={"q": "dawn"})
+
+    assert found.status_code == 200
+    items = found.json()["items"]
+    assert len(items) == 1
+    assert items[0]["original"] == "dawn on"
+
+
+def test_filter_lookup_history_by_type() -> None:
+    client = build_client()
+
+    client.post("/api/lookups", json={"text": "subtle"})
+    client.post("/api/lookups", json={"text": "dawn on"})
+
+    found = client.get("/api/lookups", params={"query_type": "sentence"})
 
     assert found.status_code == 200
     items = found.json()["items"]
