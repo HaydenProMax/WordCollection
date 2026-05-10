@@ -6,6 +6,9 @@ const statusText = document.querySelector("#status");
 const result = document.querySelector("#result");
 const historyList = document.querySelector("#history-list");
 const refreshHistory = document.querySelector("#refresh-history");
+const historySearch = document.querySelector("#history-search");
+let selectedLookupId = null;
+let searchTimer = null;
 
 function setStatus(text) {
   statusText.textContent = text;
@@ -40,6 +43,7 @@ function renderEmpty(message) {
 }
 
 function renderLookup(item) {
+  selectedLookupId = item.id;
   result.className = "result";
   result.innerHTML = "";
 
@@ -105,7 +109,28 @@ function renderHistory(items) {
     meta.className = "history-meta";
     meta.innerHTML = `<span>${queryTypeLabel(item.query_type)}</span><span>${formatDate(item.created_at)}</span>`;
 
-    button.append(title, meta);
+    const actions = document.createElement("span");
+    actions.className = "history-actions";
+
+    const regenerate = document.createElement("button");
+    regenerate.type = "button";
+    regenerate.textContent = "重新生成";
+    regenerate.addEventListener("click", async (event) => {
+      event.stopPropagation();
+      await regenerateLookup(item.id);
+    });
+
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "danger-button";
+    remove.textContent = "删除";
+    remove.addEventListener("click", async (event) => {
+      event.stopPropagation();
+      await deleteLookup(item.id);
+    });
+
+    actions.append(regenerate, remove);
+    button.append(title, meta, actions);
     button.addEventListener("click", async () => {
       const response = await fetch(`/api/lookups/${item.id}`);
       const detail = await response.json();
@@ -123,12 +148,62 @@ function renderHistory(items) {
 }
 
 async function loadHistory() {
-  const response = await fetch("/api/lookups");
+  const params = new URLSearchParams();
+  const q = historySearch.value.trim();
+  if (q) {
+    params.set("q", q);
+  }
+  const url = params.toString() ? `/api/lookups?${params}` : "/api/lookups";
+  const response = await fetch(url);
   const data = await response.json();
   if (!response.ok) {
     throw new Error(data.detail || "读取历史记录失败。");
   }
   renderHistory(data.items ?? []);
+}
+
+async function deleteLookup(id) {
+  const confirmed = window.confirm("确认删除这条记录吗？");
+  if (!confirmed) {
+    return;
+  }
+
+  setStatus("正在删除");
+  const response = await fetch(`/api/lookups/${id}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) {
+    const data = await response.json();
+    renderError(data.detail || "删除失败。");
+    setStatus("删除失败");
+    return;
+  }
+
+  if (selectedLookupId === id) {
+    selectedLookupId = null;
+    renderEmpty("解释结果会显示在这里。");
+  }
+  setStatus("已删除");
+  await loadHistory();
+}
+
+async function regenerateLookup(id) {
+  setStatus("正在重新生成");
+  const response = await fetch(`/api/lookups/${id}/regenerate`, {
+    method: "POST",
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    renderError(data.detail || "重新生成失败。");
+    setStatus("重新生成失败");
+    return;
+  }
+
+  queryInput.value = data.original;
+  updateCount();
+  renderLookup(data);
+  setStatus("已重新生成");
+  await loadHistory();
 }
 
 function updateCount() {
@@ -146,6 +221,15 @@ refreshHistory.addEventListener("click", async () => {
   } finally {
     refreshHistory.disabled = false;
   }
+});
+
+historySearch.addEventListener("input", () => {
+  window.clearTimeout(searchTimer);
+  searchTimer = window.setTimeout(() => {
+    loadHistory().catch((error) => {
+      renderError(error.message);
+    });
+  }, 220);
 });
 
 form.addEventListener("submit", async (event) => {

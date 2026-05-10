@@ -15,19 +15,23 @@ class FakeProvider:
     name = "fake"
     model_name = "fake-model"
 
+    def __init__(self) -> None:
+        self.calls = 0
+
     async def explain(self, text: str) -> LookupExplanation:
+        self.calls += 1
         return LookupExplanation(
             original=text,
             query_type="word",
             pronunciation="/test/",
-            explanation="测试解释。",
+            explanation=f"Test explanation {self.calls}.",
             examples=[
                 {
                     "english": "This is a test.",
-                    "chinese": "这是一个测试。",
+                    "chinese": "This is a test.",
                 }
             ],
-            raw_response={"provider": "fake"},
+            raw_response={"provider": "fake", "calls": self.calls},
         )
 
 
@@ -47,9 +51,10 @@ def build_client() -> TestClient:
         finally:
             db.close()
 
+    provider = FakeProvider()
     app = create_app()
     app.dependency_overrides[get_db] = override_db
-    app.dependency_overrides[get_llm_provider] = lambda: FakeProvider()
+    app.dependency_overrides[get_llm_provider] = lambda: provider
     return TestClient(app)
 
 
@@ -68,3 +73,40 @@ def test_create_and_list_lookup() -> None:
 
     assert listed.status_code == 200
     assert listed.json()["items"][0]["original"] == "subtle"
+
+
+def test_search_lookup_history() -> None:
+    client = build_client()
+
+    client.post("/api/lookups", json={"text": "subtle"})
+    client.post("/api/lookups", json={"text": "dawn on"})
+
+    found = client.get("/api/lookups", params={"q": "dawn"})
+
+    assert found.status_code == 200
+    items = found.json()["items"]
+    assert len(items) == 1
+    assert items[0]["original"] == "dawn on"
+
+
+def test_delete_lookup() -> None:
+    client = build_client()
+    created = client.post("/api/lookups", json={"text": "subtle"}).json()
+
+    deleted = client.delete(f"/api/lookups/{created['id']}")
+
+    assert deleted.status_code == 204
+    listed = client.get("/api/lookups")
+    assert listed.json()["items"] == []
+
+
+def test_regenerate_lookup_updates_existing_record() -> None:
+    client = build_client()
+    created = client.post("/api/lookups", json={"text": "subtle"}).json()
+
+    regenerated = client.post(f"/api/lookups/{created['id']}/regenerate")
+
+    assert regenerated.status_code == 200
+    body = regenerated.json()
+    assert body["id"] == created["id"]
+    assert body["explanation"] == "Test explanation 2."

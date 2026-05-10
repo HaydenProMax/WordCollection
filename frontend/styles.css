@@ -29,6 +29,7 @@ body {
 }
 
 button,
+input,
 textarea {
   font: inherit;
 }
@@ -118,6 +119,28 @@ textarea {
 textarea:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.14);
+}
+
+.history-search {
+  width: 100%;
+  min-height: 40px;
+  border: 2px solid #c7d2fe;
+  border-radius: 8px;
+  margin-top: 14px;
+  padding: 0 12px;
+  background: #ffffff;
+  color: var(--text);
+  outline: none;
+}
+
+.history-search:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.14);
+}
+
+.search-label {
+  display: block;
+  margin-top: 14px;
 }
 
 .form-row,
@@ -281,7 +304,8 @@ svg {
 }
 
 .history-item {
-  display: block;
+  display: grid;
+  gap: 10px;
   width: 100%;
   min-height: auto;
   border: 1px solid #dbeafe;
@@ -319,6 +343,36 @@ svg {
   color: var(--muted);
   font-size: 12px;
   font-weight: 700;
+}
+
+.history-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.history-actions button {
+  min-height: 34px;
+  border: 1px solid #c7d2fe;
+  padding: 0 10px;
+  background: #eef2ff;
+  color: var(--primary-dark);
+  font-size: 12px;
+}
+
+.history-actions button:hover {
+  background: #e0e7ff;
+  box-shadow: none;
+}
+
+.history-actions .danger-button {
+  border-color: #fecaca;
+  background: #fff1f2;
+  color: var(--danger);
+}
+
+.history-actions .danger-button:hover {
+  background: #ffe4e6;
 }
 
 .empty-state {
