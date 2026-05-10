@@ -60,13 +60,13 @@ Required features:
 
 Acceptance criteria:
 
-- [ ] App starts from WSL.
+- [x] App starts from WSL.
 - [x] Local Docker PostgreSQL is reachable.
 - [x] Database migrations run from an empty database.
-- [ ] A word lookup returns original text, pronunciation, explanation, and examples.
-- [ ] A sentence lookup returns original text, explanation, and examples.
-- [ ] Successful lookups are persisted.
-- [ ] History survives page refresh.
+- [x] A word lookup returns original text, pronunciation, explanation, and examples.
+- [x] A sentence lookup returns original text, explanation, and examples.
+- [x] Successful lookups are persisted.
+- [x] History survives page refresh.
 - [ ] Missing OpenAI API key produces a clear error.
 - [x] Tests pass on `dev`.
 - [ ] `dev` is merged into `main`.
@@ -329,6 +329,7 @@ Rollback:
 ### 2026-05-10 Local Browser Verification
 
 - Verified the full local browser flow at `http://127.0.0.1:8000/`.
+- User confirmed local testing passed.
 - Confirmed the startup commands below are the current stable local development flow.
 - Do not change these commands casually; only update them when the runtime structure changes intentionally.
 
