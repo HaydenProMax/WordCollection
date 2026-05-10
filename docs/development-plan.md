@@ -74,7 +74,7 @@ Acceptance criteria:
 
 ### v0.2.0 - History Management
 
-Status: In progress
+Status: Released
 
 Goal: Make saved lookups easier to manage.
 
@@ -84,7 +84,7 @@ Candidate features:
 - [x] Delete lookup
 - [x] Regenerate explanation
 - [x] Update lookup explanation after regeneration
-- [ ] Better empty/error/loading states
+- [x] Better empty/error/loading states
 
 ### v0.3.0 - Organization and Export
 
@@ -355,3 +355,8 @@ python -m uvicorn app.main:app --reload
 - Added `POST /api/lookups/{id}/regenerate`.
 - Added frontend search input, delete action, and regenerate action.
 - Expanded API tests from 4 to 7 cases.
+
+### 2026-05-10 v0.2.0 Release
+
+- User verified history search, delete, and regenerate locally in the browser.
+- Prepared `v0.2.0` for merge into `main`.
