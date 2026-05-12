@@ -5,11 +5,11 @@ This document describes how to deploy a server-side test environment from the `t
 The test environment should be isolated from production:
 
 - Branch: `test`
-- App name: `encollect-test`
-- App home: `/opt/encollect-test`
+- App name: `word-collection-staging`
+- App home: `/opt/word-collection-staging`
 - App port: `8001`
-- Database: `encollect_test`
-- Service: `encollect-test`
+- Database: `word_collection_staging`
+- Service: `word-collection-staging`
 - Recommended domain: `test.your-domain.example.com`
 
 Do not share the production database with the test environment.
@@ -23,9 +23,60 @@ git checkout test
 git push -u origin test
 ```
 
-## 2. Deploy Test Environment
+## 2. Create Staging Config
 
-Run this on the Ubuntu 24.04 server.
+Create a private server-side config file:
+
+```bash
+sudo nano /etc/word-collection-staging.env
+```
+
+Example:
+
+```bash
+DOMAIN='test.your-domain.example.com'
+DB_PASSWORD='replace_with_a_strong_test_password'
+OPENAI_API_KEY='replace_with_your_api_key'
+ENABLE_HTTPS='1'
+```
+
+Optional overrides:
+
+```bash
+REPO_URL='git@github.com:HaydenProMax/WordCollection.git'
+OPENAI_MODEL='gpt-5.5'
+OPENAI_BASE_URL='https://www.fhl.mom/v1'
+```
+
+Protect it:
+
+```bash
+sudo chmod 600 /etc/word-collection-staging.env
+```
+
+## 3. Deploy Test Environment
+
+Run this from the repository directory on the Ubuntu 24.04 server:
+
+```bash
+sudo bash scripts/deploy-staging-ubuntu-24.04.sh
+```
+
+The wrapper script fixes the staging values:
+
+```text
+APP_NAME=word-collection-staging
+APP_USER=word-collection-staging
+APP_HOME=/opt/word-collection-staging
+APP_PORT=8001
+APP_REF=test
+DB_NAME=word_collection_staging
+DB_USER=word_collection_staging
+```
+
+## 4. Manual Deploy Command
+
+The long-form command is still available if you need to override everything manually.
 
 Replace:
 
@@ -38,13 +89,13 @@ Replace:
 sudo -E env \
   REPO_URL='git@github.com:HaydenProMax/WordCollection.git' \
   DOMAIN='test.your-domain.example.com' \
-  APP_NAME='encollect-test' \
-  APP_USER='encollect-test' \
-  APP_HOME='/opt/encollect-test' \
+  APP_NAME='word-collection-staging' \
+  APP_USER='word-collection-staging' \
+  APP_HOME='/opt/word-collection-staging' \
   APP_PORT='8001' \
   APP_REF='test' \
-  DB_NAME='encollect_test' \
-  DB_USER='encollect_test' \
+  DB_NAME='word_collection_staging' \
+  DB_USER='word_collection_staging' \
   DB_PASSWORD='replace_with_a_strong_test_password' \
   OPENAI_MODEL='gpt-5.5' \
   OPENAI_BASE_URL='https://www.fhl.mom/v1' \
@@ -55,7 +106,7 @@ sudo -E env \
 
 `APP_REF=test` tells the script to deploy from the `test` branch instead of a release tag.
 
-## 3. Update Test Environment
+## 5. Update Test Environment
 
 After local changes are merged or pushed to `test`, run the deployment script again with the same variables.
 
@@ -68,15 +119,15 @@ The script is designed to be re-runnable:
 - It restarts the systemd service.
 - It reloads Nginx.
 
-## 4. Check Services
+## 6. Check Services
 
 ```bash
-sudo systemctl status encollect-test
-sudo journalctl -u encollect-test -f
+sudo systemctl status word-collection-staging
+sudo journalctl -u word-collection-staging -f
 curl http://127.0.0.1:8001/api/lookups
 ```
 
-## 5. Promote Test to Production
+## 7. Promote Test to Production
 
 After the test environment is verified:
 

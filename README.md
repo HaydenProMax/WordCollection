@@ -124,3 +124,9 @@ Server-side test environment deployment is documented in:
 ```text
 docs/test-environment-deployment.md
 ```
+
+The staging wrapper script is:
+
+```text
+scripts/deploy-staging-ubuntu-24.04.sh
+```
