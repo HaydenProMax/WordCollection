@@ -9,6 +9,27 @@ This document describes how to deploy enCollect on Ubuntu 24.04 with:
 
 ## 1. Install System Dependencies
 
+For a one-command deployment script, see:
+
+```text
+scripts/deploy-ubuntu-24.04.sh
+```
+
+Example:
+
+```bash
+sudo -E env \
+  REPO_URL='https://github.com/you/enCollect.git' \
+  DOMAIN='your-domain.example.com' \
+  DB_PASSWORD='replace_with_a_strong_password' \
+  OPENAI_API_KEY='replace_with_your_api_key' \
+  APP_TAG='v1.0.0' \
+  ENABLE_HTTPS='1' \
+  bash scripts/deploy-ubuntu-24.04.sh
+```
+
+The rest of this document explains each step manually.
+
 ```bash
 sudo apt update
 sudo apt install -y \
@@ -281,4 +302,3 @@ sudo systemctl status encollect
 sudo systemctl status nginx
 sudo systemctl status postgresql
 ```
-

@@ -112,3 +112,9 @@ Ubuntu 24.04 deployment instructions are documented in:
 ```text
 docs/ubuntu-24.04-deployment.md
 ```
+
+The deployment helper script is:
+
+```text
+scripts/deploy-ubuntu-24.04.sh
+```
