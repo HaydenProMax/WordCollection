@@ -118,3 +118,9 @@ The deployment helper script is:
 ```text
 scripts/deploy-ubuntu-24.04.sh
 ```
+
+Server-side test environment deployment is documented in:
+
+```text
+docs/test-environment-deployment.md
+```

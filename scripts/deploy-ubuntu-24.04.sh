@@ -7,6 +7,7 @@ APP_HOME="${APP_HOME:-/opt/encollect}"
 APP_DIR="${APP_DIR:-${APP_HOME}/app}"
 APP_PORT="${APP_PORT:-8000}"
 APP_TAG="${APP_TAG:-v1.0.0}"
+APP_REF="${APP_REF:-${APP_TAG}}"
 
 REPO_URL="${REPO_URL:-}"
 DOMAIN="${DOMAIN:-}"
@@ -98,7 +99,7 @@ deploy_code() {
     sudo -u "${APP_USER}" git -C "${APP_DIR}" fetch --tags
   fi
 
-  sudo -u "${APP_USER}" git -C "${APP_DIR}" checkout "${APP_TAG}"
+  sudo -u "${APP_USER}" git -C "${APP_DIR}" checkout "${APP_REF}"
 }
 
 configure_postgres() {

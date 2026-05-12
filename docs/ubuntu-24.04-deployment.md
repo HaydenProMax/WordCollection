@@ -28,6 +28,12 @@ sudo -E env \
   bash scripts/deploy-ubuntu-24.04.sh
 ```
 
+Use `APP_REF` when deploying a branch instead of a tag. For the server-side test environment, see:
+
+```text
+docs/test-environment-deployment.md
+```
+
 The rest of this document explains each step manually.
 
 ```bash
