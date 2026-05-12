@@ -104,3 +104,11 @@ From `backend/`:
 ```bash
 pytest
 ```
+
+## Production Deployment
+
+Ubuntu 24.04 deployment instructions are documented in:
+
+```text
+docs/ubuntu-24.04-deployment.md
+```
