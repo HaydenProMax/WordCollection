@@ -130,3 +130,9 @@ The staging wrapper script is:
 ```text
 scripts/deploy-staging-ubuntu-24.04.sh
 ```
+
+The staging configuration checklist is:
+
+```text
+STAGING_CONFIG.md
+```
