@@ -136,3 +136,15 @@ The staging configuration checklist is:
 ```text
 STAGING_CONFIG.md
 ```
+
+Production environment configuration is documented in:
+
+```text
+PRODUCTION_CONFIG.md
+```
+
+The production wrapper script is:
+
+```text
+scripts/deploy-production-ubuntu-24.04.sh
+```
