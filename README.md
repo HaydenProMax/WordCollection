@@ -104,3 +104,35 @@ From `backend/`:
 ```bash
 pytest
 ```
+
+## Production Deployment
+
+Ubuntu 24.04 deployment instructions are documented in:
+
+```text
+docs/ubuntu-24.04-deployment.md
+```
+
+The deployment helper script is:
+
+```text
+scripts/deploy-ubuntu-24.04.sh
+```
+
+Server-side test environment deployment is documented in:
+
+```text
+docs/test-environment-deployment.md
+```
+
+The staging wrapper script is:
+
+```text
+scripts/deploy-staging-ubuntu-24.04.sh
+```
+
+The staging configuration checklist is:
+
+```text
+STAGING_CONFIG.md
+```
